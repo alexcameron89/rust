@@ -83,6 +83,7 @@ pub enum EvalErrorKind<'tcx, O> {
     InvalidNullPointerUsage,
     ReadPointerAsBytes,
     ReadBytesAsPointer,
+    ReadForeignStatic,
     InvalidPointerMath,
     ReadUndefBytes,
     DeadLocal,
@@ -196,6 +197,8 @@ impl<'tcx, O> EvalErrorKind<'tcx, O> {
                 "a raw memory access tried to access part of a pointer value as raw bytes",
             ReadBytesAsPointer =>
                 "a memory access tried to interpret some bytes as a pointer",
+            ReadForeignStatic =>
+                "tried to read foreign (extern) static",
             InvalidPointerMath =>
                 "attempted to do invalid arithmetic on pointers that would leak base addresses, e.g. comparing pointers into different allocations",
             ReadUndefBytes =>
