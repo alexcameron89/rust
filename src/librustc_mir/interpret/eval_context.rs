@@ -1037,15 +1037,6 @@ impl<'a, 'mir, 'tcx: 'mir, M: Machine<'mir, 'tcx>> EvalContext<'a, 'mir, 'tcx, M
     }
 
     pub fn read_global_as_value(&mut self, gid: GlobalId<'tcx>, ty: Ty<'tcx>) -> EvalResult<'tcx, Value> {
-        if self.tcx.is_static(gid.instance.def_id()).is_some() {
-            let alloc_id = self
-                .tcx
-                .alloc_map
-                .lock()
-                .intern_static(gid.instance.def_id());
-            let layout = self.layout_of(ty)?;
-            return Ok(Value::ByRef(Scalar::Ptr(alloc_id.into()), layout.align))
-        }
         let cv = self.const_eval(gid)?;
         self.const_to_value(&cv.val, ty)
     }
