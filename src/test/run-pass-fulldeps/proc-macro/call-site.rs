@@ -1,4 +1,4 @@
-// Copyright 2017 The Rust Project Developers. See the COPYRIGHT
+// Copyright 2016 The Rust Project Developers. See the COPYRIGHT
 // file at the top-level directory of this distribution and at
 // http://rust-lang.org/COPYRIGHT.
 //
@@ -8,20 +8,16 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 
-#![feature(decl_macro)]
+// aux-build:call-site.rs
+// ignore-stage1
 
-pub mod foo {
-    pub use self::bar::m;
-    mod bar {
-        fn f() -> u32 { 1 }
-        pub macro m() {
-            f();
-        }
-    }
-}
+#![feature(proc_macro, proc_macro_non_items)]
 
-pub struct SomeType;
+extern crate call_site;
+use call_site::*;
 
-pub macro uses_dollar_crate() {
-    type Alias = $crate::SomeType;
+fn main() {
+    let x1 = 10;
+    call_site::check!(let x2 = x1;);
+    let x6 = x5;
 }
