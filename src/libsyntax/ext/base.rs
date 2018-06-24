@@ -646,6 +646,7 @@ pub enum SyntaxExtension {
     DeclMacro {
         expander: Box<TTMacroExpander + sync::Sync + sync::Send>,
         def_info: Option<(ast::NodeId, Span)>,
+        is_transparent: bool,
         edition: Edition,
     }
 }
@@ -675,6 +676,13 @@ impl SyntaxExtension {
             SyntaxExtension::ProcMacro { .. } |
             SyntaxExtension::AttrProcMacro(..) |
             SyntaxExtension::ProcMacroDerive(..) => true,
+            _ => false,
+        }
+    }
+
+    pub fn is_transparent(&self) -> bool {
+        match *self {
+            SyntaxExtension::DeclMacro { is_transparent, .. } => is_transparent,
             _ => false,
         }
     }
